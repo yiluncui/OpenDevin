@@ -1,5 +1,6 @@
 import uuid
 import warnings
+import time
 
 from opendevin.server.data_models.feedback import FeedbackDataModel, store_feedback
 
@@ -150,7 +151,7 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.close()
             return
     else:
-        sid = str(uuid.uuid4())
+        sid = str(time.time_ns())
         token = sign_token({'sid': sid})
 
     session = session_manager.add_or_restart_session(sid, websocket)
@@ -183,12 +184,8 @@ async def get_litellm_models():
     curl http://localhost:3000/api/litellm-models
     ```
     """
-    litellm_model_list = litellm.model_list + list(litellm.model_cost.keys())
-    litellm_model_list_without_bedrock = bedrock.remove_error_modelId(
-        litellm_model_list
-    )
     bedrock_model_list = bedrock.list_foundation_models()
-    model_list = litellm_model_list_without_bedrock + bedrock_model_list
+    model_list = bedrock_model_list
 
     return list(set(model_list))
 

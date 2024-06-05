@@ -57,6 +57,7 @@ class LLMConfig(metaclass=Singleton):
     embedding_deployment_name: str | None = None
     aws_access_key_id: str | None = None
     aws_secret_access_key: str | None = None
+    aws_session_token: str | None = None
     aws_region_name: str | None = None
     num_retries: int = 5
     retry_min_wait: int = 3
@@ -164,7 +165,7 @@ class AppConfig(metaclass=Singleton):
     workspace_mount_path_in_sandbox: str = '/workspace'
     workspace_mount_rewrite: str | None = None
     cache_dir: str = '/tmp/cache'
-    sandbox_container_image: str = 'ghcr.io/opendevin/sandbox' + (
+    sandbox_container_image: str = 'opendevin/sandbox' + (
         f':{os.getenv("OPEN_DEVIN_BUILD_VERSION")}'
         if os.getenv('OPEN_DEVIN_BUILD_VERSION')
         else ':main'
@@ -178,7 +179,7 @@ class AppConfig(metaclass=Singleton):
     ssh_hostname: str = 'localhost'
     disable_color: bool = False
     sandbox_user_id: int = os.getuid() if hasattr(os, 'getuid') else 1000
-    sandbox_timeout: int = 120
+    sandbox_timeout: int = 1200
     persist_sandbox: bool = False
     ssh_port: int = 63710
     ssh_password: str | None = None
